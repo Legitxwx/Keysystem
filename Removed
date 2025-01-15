@@ -1,0 +1,168 @@
+-- **Services**
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- **Key Configuration**
+local CorrectKey = "12345" -- Replace with your desired key
+local Attempts = 0
+local MaxAttempts = 5
+local KeyLink = "https://example.com/get-your-key" -- Replace with your key link
+
+-- **UI Creation**
+local KeyScreen = Instance.new("ScreenGui", PlayerGui)
+KeyScreen.Name = "EnhancedKeyScreen"
+KeyScreen.ResetOnSpawn = false
+
+-- **Main Frame**
+local KeyFrame = Instance.new("Frame", KeyScreen)
+KeyFrame.Size = UDim2.new(0.5, 0, 0.5, 0) -- Larger and centered
+KeyFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+KeyFrame.BorderSizePixel = 0
+
+local UICorner = Instance.new("UICorner", KeyFrame)
+UICorner.CornerRadius = UDim.new(0, 20)
+
+-- **Title**
+local Title = Instance.new("TextLabel", KeyFrame)
+Title.Size = UDim2.new(1, 0, 0.15, 0)
+Title.Position = UDim2.new(0, 0, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "🔒 Secure Key System"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextScaled = true
+Title.Font = Enum.Font.GothamBold
+
+-- **Instructional Text**
+local InstructionText = Instance.new("TextLabel", KeyFrame)
+InstructionText.Size = UDim2.new(0.9, 0, 0.1, 0)
+InstructionText.Position = UDim2.new(0.05, 0, 0.2, 0)
+InstructionText.BackgroundTransparency = 1
+InstructionText.Text = "Need a key? Click 'Get Key' below!"
+InstructionText.TextColor3 = Color3.fromRGB(200, 200, 200)
+InstructionText.TextScaled = true
+InstructionText.Font = Enum.Font.Gotham
+
+-- **Attempts Left Text**
+local AttemptsText = Instance.new("TextLabel", KeyFrame)
+AttemptsText.Size = UDim2.new(0.9, 0, 0.1, 0)
+AttemptsText.Position = UDim2.new(0.05, 0, 0.3, 0)
+AttemptsText.BackgroundTransparency = 1
+AttemptsText.Text = "Attempts Left: " .. (MaxAttempts - Attempts)
+AttemptsText.TextColor3 = Color3.fromRGB(255, 100, 100)
+AttemptsText.TextScaled = true
+AttemptsText.Font = Enum.Font.GothamBold
+
+-- **Key Input Box**
+local KeyTextBox = Instance.new("TextBox", KeyFrame)
+KeyTextBox.Size = UDim2.new(0.8, 0, 0.15, 0)
+KeyTextBox.Position = UDim2.new(0.1, 0, 0.45, 0)
+KeyTextBox.PlaceholderText = "Enter your key here"
+KeyTextBox.Text = ""
+KeyTextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+KeyTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyTextBox.TextScaled = true
+KeyTextBox.Font = Enum.Font.Gotham
+
+local TextBoxCorner = Instance.new("UICorner", KeyTextBox)
+TextBoxCorner.CornerRadius = UDim.new(0, 10)
+
+-- **Submit Button**
+local SubmitButton = Instance.new("TextButton", KeyFrame)
+SubmitButton.Size = UDim2.new(0.8, 0, 0.15, 0)
+SubmitButton.Position = UDim2.new(0.1, 0, 0.65, 0)
+SubmitButton.Text = "Submit"
+SubmitButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitButton.TextScaled = true
+SubmitButton.Font = Enum.Font.GothamBold
+
+local ButtonCorner = Instance.new("UICorner", SubmitButton)
+ButtonCorner.CornerRadius = UDim.new(0, 10)
+
+-- **Get Key Button**
+local GetKeyButton = Instance.new("TextButton", KeyFrame)
+GetKeyButton.Size = UDim2.new(0.8, 0, 0.15, 0)
+GetKeyButton.Position = UDim2.new(0.1, 0, 0.85, 0)
+GetKeyButton.Text = "Get Key"
+GetKeyButton.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+GetKeyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+GetKeyButton.TextScaled = true
+GetKeyButton.Font = Enum.Font.GothamBold
+
+local GetButtonCorner = Instance.new("UICorner", GetKeyButton)
+GetButtonCorner.CornerRadius = UDim.new(0, 10)
+
+-- **Drag Functionality**
+local dragging = false
+local dragStart, startPos
+
+KeyFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = KeyFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+KeyFrame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        KeyFrame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+-- **Functionality**
+SubmitButton.MouseButton1Click:Connect(function()
+    if KeyTextBox.Text == CorrectKey then
+        KeyTextBox.Visible = false
+        SubmitButton.Visible = false
+        InstructionText.Visible = false
+        AttemptsText.Text = "Key correct! Please wait..."
+        
+        -- Show a loading screen for 3 seconds
+        local LoadingScreen = Instance.new("Frame", KeyScreen)
+        LoadingScreen.Size = UDim2.new(1, 0, 1, 0)
+        LoadingScreen.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        LoadingScreen.BackgroundTransparency = 0.6
+
+        local LoadingLabel = Instance.new("TextLabel", LoadingScreen)
+        LoadingLabel.Size = UDim2.new(1, 0, 0.1, 0)
+        LoadingLabel.Position = UDim2.new(0, 0, 0.45, 0)
+        LoadingLabel.Text = "Loading, please wait..."
+        LoadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        LoadingLabel.TextScaled = true
+        LoadingLabel.Font = Enum.Font.GothamBold
+
+        task.wait(3) -- Wait 3 seconds
+       -- Your Key Here
+        KeyScreen:Destroy()
+    else
+        Attempts += 1
+        if Attempts >= MaxAttempts then
+            LocalPlayer:Kick("Too many incorrect attempts. You have been kicked.")
+        else
+            AttemptsText.Text = "Attempts Left: " .. (MaxAttempts - Attempts)
+            KeyTextBox.Text = ""
+            KeyTextBox.PlaceholderText = "Incorrect! Try again."
+        end
+    end
+end)
+
+GetKeyButton.MouseButton1Click:Connect(function()
+    setclipboard(KeyLink) -- Copies the link to the player's clipboard
+    GetKeyButton.Text = "Key Link Copied!"
+    task.wait(2)
+    GetKeyButton.Text = "Get Key"
+end)
