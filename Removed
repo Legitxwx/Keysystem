@@ -1,20 +1,16 @@
--- **Services**
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- **Key Configuration**
 local CorrectKey = "12345" -- Replace with your desired key
 local Attempts = 0
 local MaxAttempts = 5
 local KeyLink = "https://example.com/get-your-key" -- Replace with your key link
 
--- **UI Creation**
 local KeyScreen = Instance.new("ScreenGui", PlayerGui)
 KeyScreen.Name = "EnhancedKeyScreen"
 KeyScreen.ResetOnSpawn = false
 
--- **Main Frame**
 local KeyFrame = Instance.new("Frame", KeyScreen)
 KeyFrame.Size = UDim2.new(0.5, 0, 0.5, 0) -- Larger and centered
 KeyFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
@@ -24,7 +20,6 @@ KeyFrame.BorderSizePixel = 0
 local UICorner = Instance.new("UICorner", KeyFrame)
 UICorner.CornerRadius = UDim.new(0, 20)
 
--- **Title**
 local Title = Instance.new("TextLabel", KeyFrame)
 Title.Size = UDim2.new(1, 0, 0.15, 0)
 Title.Position = UDim2.new(0, 0, 0, 0)
@@ -34,7 +29,6 @@ Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextScaled = true
 Title.Font = Enum.Font.GothamBold
 
--- **Instructional Text**
 local InstructionText = Instance.new("TextLabel", KeyFrame)
 InstructionText.Size = UDim2.new(0.9, 0, 0.1, 0)
 InstructionText.Position = UDim2.new(0.05, 0, 0.2, 0)
@@ -44,7 +38,6 @@ InstructionText.TextColor3 = Color3.fromRGB(200, 200, 200)
 InstructionText.TextScaled = true
 InstructionText.Font = Enum.Font.Gotham
 
--- **Attempts Left Text**
 local AttemptsText = Instance.new("TextLabel", KeyFrame)
 AttemptsText.Size = UDim2.new(0.9, 0, 0.1, 0)
 AttemptsText.Position = UDim2.new(0.05, 0, 0.3, 0)
@@ -54,7 +47,6 @@ AttemptsText.TextColor3 = Color3.fromRGB(255, 100, 100)
 AttemptsText.TextScaled = true
 AttemptsText.Font = Enum.Font.GothamBold
 
--- **Key Input Box**
 local KeyTextBox = Instance.new("TextBox", KeyFrame)
 KeyTextBox.Size = UDim2.new(0.8, 0, 0.15, 0)
 KeyTextBox.Position = UDim2.new(0.1, 0, 0.45, 0)
@@ -68,7 +60,6 @@ KeyTextBox.Font = Enum.Font.Gotham
 local TextBoxCorner = Instance.new("UICorner", KeyTextBox)
 TextBoxCorner.CornerRadius = UDim.new(0, 10)
 
--- **Submit Button**
 local SubmitButton = Instance.new("TextButton", KeyFrame)
 SubmitButton.Size = UDim2.new(0.8, 0, 0.15, 0)
 SubmitButton.Position = UDim2.new(0.1, 0, 0.65, 0)
@@ -81,7 +72,6 @@ SubmitButton.Font = Enum.Font.GothamBold
 local ButtonCorner = Instance.new("UICorner", SubmitButton)
 ButtonCorner.CornerRadius = UDim.new(0, 10)
 
--- **Get Key Button**
 local GetKeyButton = Instance.new("TextButton", KeyFrame)
 GetKeyButton.Size = UDim2.new(0.8, 0, 0.15, 0)
 GetKeyButton.Position = UDim2.new(0.1, 0, 0.85, 0)
@@ -94,7 +84,6 @@ GetKeyButton.Font = Enum.Font.GothamBold
 local GetButtonCorner = Instance.new("UICorner", GetKeyButton)
 GetButtonCorner.CornerRadius = UDim.new(0, 10)
 
--- **Drag Functionality**
 local dragging = false
 local dragStart, startPos
 
@@ -123,7 +112,6 @@ KeyFrame.InputChanged:Connect(function(input)
     end
 end)
 
--- **Functionality**
 SubmitButton.MouseButton1Click:Connect(function()
     if KeyTextBox.Text == CorrectKey then
         KeyTextBox.Visible = false
@@ -145,8 +133,8 @@ SubmitButton.MouseButton1Click:Connect(function()
         LoadingLabel.TextScaled = true
         LoadingLabel.Font = Enum.Font.GothamBold
 
-        task.wait(3) -- Wait 3 seconds
-       -- Your Key Here
+        task.wait(3)
+       -- Your Script Here
         KeyScreen:Destroy()
     else
         Attempts += 1
